@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "upsilon-py"
+version = "0.1.0"
+description = "Connect to NumWorks calculators using Python"
+authors = ["Yaya-Cout <yaya.cout@free.fr>"]
+readme = "README.md"
+packages = [{include = "upsilon_py"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
