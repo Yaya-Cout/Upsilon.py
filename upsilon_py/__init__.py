@@ -22,7 +22,7 @@ class JavaScriptError(Exception):
 class NumWorks:
     """NumWorks object."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the NumWorks object."""
         logger.info("Initializing NumWorks object")
         # Process
@@ -38,7 +38,7 @@ class NumWorks:
         # Asyncio queue
         self._queue = asyncio.Queue()
 
-    async def start(self):
+    async def start(self) -> None:
         """Start the NumWorks object."""
         logger.info("Starting NumWorks object")
         # Get npm global install path (command : npm root --quiet -g)
@@ -70,7 +70,7 @@ class NumWorks:
         # Wait to receive the "{ "ready": true }" message
         asyncio.ensure_future(self._wait_for_ready())
 
-    async def stop(self):
+    async def stop(self) -> None:
         """Stop the NumWorks object."""
         logger.info("Stopping NumWorks object")
 
@@ -88,7 +88,7 @@ class NumWorks:
 
         self.ready.clear()
 
-    async def _wait_for_ready(self):
+    async def _wait_for_ready(self) -> None:
         """Wait for the ready message."""
         while True:
             # Get the data
@@ -99,7 +99,7 @@ class NumWorks:
                 self.ready.set()
                 break
 
-    async def _redirect_stderr(self):
+    async def _redirect_stderr(self) -> None:
         """Redirect the stderr to the logger."""
         while True:
             # Read the data
@@ -115,7 +115,7 @@ class NumWorks:
             # Log the data
             logger.error(data)
 
-    async def _read(self):
+    async def _read(self) -> None:
         """Read the data from the NumWorks."""
         while True:
             # Read the data
@@ -134,7 +134,7 @@ class NumWorks:
             # Put the data in the queue
             await self._queue.put(data)
 
-    async def _write(self, data):
+    async def _write(self, data: dict) -> None:
         """Write the data to the NumWorks."""
         # Dump the data
         data = json.dumps(data)
@@ -148,7 +148,7 @@ class NumWorks:
         # Flush the writer
         await self.writer.drain()
 
-    async def _get_result(self):
+    async def _get_result(self) -> dict:
         """Get the result from the queue."""
         # Get the result
         result = await self._queue.get()
@@ -159,7 +159,7 @@ class NumWorks:
         # Return the result
         return result
 
-    async def connect(self):
+    async def connect(self) -> dict[str, str]:
         """Connect to the NumWorks."""
         logger.info("Connecting to the NumWorks")
         await self.ensure_ready()
@@ -174,7 +174,7 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def disconnect(self):
+    async def disconnect(self) -> dict[str, str]:
         """Disconnect from the NumWorks."""
         logger.info("Disconnecting from the NumWorks")
         await self.ensure_ready()
@@ -189,7 +189,7 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def status(self):
+    async def status(self) -> dict[str, str]:
         """Get the status of the NumWorks."""
         logger.info("Getting the status of the NumWorks")
         await self.ensure_ready()
@@ -204,7 +204,7 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def get_model(self):
+    async def get_model(self) -> int:
         """Get the model of the NumWorks."""
         logger.info("Getting the model of the NumWorks")
         await self.ensure_connected()
@@ -219,7 +219,7 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def get_platform_info(self):
+    async def get_platform_info(self) -> dict:
         """Get the platformInfo of the NumWorks."""
         await self.ensure_connected()
         logger.info("Getting the platformInfo of the NumWorks")
@@ -234,7 +234,7 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def backup_storage(self):
+    async def backup_storage(self) -> dict:
         """Backup the storage of the NumWorks."""
         logger.info("Backing up the storage of the NumWorks")
         await self.ensure_connected()
@@ -249,7 +249,7 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def install_storage(self, storage):
+    async def install_storage(self, storage: dict) -> dict[str, str]:
         """Install the storage on the NumWorks."""
         logger.info("Installing the storage on the NumWorks")
         await self.ensure_connected()
@@ -265,11 +265,11 @@ class NumWorks:
         # Return the result
         return await self._get_result()
 
-    async def ensure_ready(self):
+    async def ensure_ready(self) -> None:
         """Ensure the subprocess is ready."""
         await self.ready.wait()
 
-    async def ensure_connected(self):
+    async def ensure_connected(self) -> None:
         """Ensure the NumWorks is connected."""
         await self.ensure_ready()
 
